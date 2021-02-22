@@ -233,7 +233,7 @@ describe('GET butterflyratings', () => {
       .get('/butterflyratings/bad-id');
     expect(response.status).toBe(404);
     expect(response.body).toEqual({
-      error: 'Not found'
+      error: 'Invalid user'
     });
   });
 });

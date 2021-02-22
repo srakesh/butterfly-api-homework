@@ -108,13 +108,22 @@ async function createApp(dbPath) {
    * GET
    */
   app.get('/butterflyratings/:id', async (req, res) => {
+    // Check if user exists in DB.
+    const user = await db.get('users')
+      .find({ id: req.params.id })
+      .value();
+
+    if (!user) {
+      return res.status(404).json({ error: 'Invalid user' });
+    }
+
     const butterflyratings = await db.get('butterflyratings')
       .filter({ userid: req.params.id })
       .sortBy('rating').reverse()
       .take(5)
       .value();
     if (butterflyratings.length === 0) {
-      return res.status(404).json({ error: 'Not found' });
+      return res.json([]);
     }
 
     res.json(butterflyratings);
